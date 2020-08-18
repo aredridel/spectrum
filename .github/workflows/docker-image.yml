@@ -1,0 +1,32 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ alpha ]
+  pull_request:
+    branches: [ alpha ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1.4.3
+        node-version: 12
+    - name: Build the API Docker image
+      run: docker build . --file docker/Dockerfile.api --tag spectrum-api:$(date +%s)
+    - name: Build the Athena Docker image
+      run: docker build . --file docker/Dockerfile.athena --tag spectrum-athena:$(date +%s)
+    - name: Build the Chronos Docker image
+      run: docker build . --file docker/Dockerfile.chronos --tag spectrum-chronos:$(date +%s)
+    - name: Build the Hermes Docker image
+      run: docker build . --file docker/Dockerfile.hermes --tag spectrum-hermes:$(date +%s)
+    - name: Build the Hyperion Docker image
+      run: docker build . --file docker/Dockerfile.hyperion --tag spectrum-hyperion:$(date +%s)
+    - name: Build the Mercury Docker image
+      run: docker build . --file docker/Dockerfile.mercury --tag spectrum-mercury:$(date +%s)
+    - name: Build the Vulcan Docker image
+      run: docker build . --file docker/Dockerfile.vulcan --tag spectrum-vulcan:$(date +%s)
