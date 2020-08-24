@@ -19,42 +19,17 @@ const DEFAULT_CONFIG = {
   timeout: 30, // The number of seconds for a connection to be opened, default 20
 };
 
-let ca;
-
-try {
-  ca = fs.readFileSync(path.join(process.cwd(), 'cacert'));
-} catch (err) {}
-
-if (!ca && IS_PROD)
-  throw new Error(
-    'Please provide the SSL certificate to connect to the production database in a file called `cacert` in the root directory.'
-  );
-
 const PRODUCTION_CONFIG = {
   servers: [
     {
       password: process.env.COMPOSE_RETHINKDB_PASSWORD,
       host: process.env.COMPOSE_RETHINKDB_URL,
       port: process.env.COMPOSE_RETHINKDB_PORT,
-      ...(ca
-        ? {
-            ssl: {
-              ca,
-            },
-          }
-        : {}),
     },
     {
       password: process.env.COMPOSE_RETHINKDB_PASSWORD,
       host: process.env.BACKUP_RETHINKDB_URL,
       port: process.env.BACKUP_RETHINKDB_PORT,
-      ...(ca
-        ? {
-            ssl: {
-              ca,
-            },
-          }
-        : {}),
     },
   ],
 };
